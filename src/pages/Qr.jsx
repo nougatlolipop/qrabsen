@@ -8,13 +8,14 @@ function Qr() {
   const [token, setToken] = useState("");
   const [time, setTime] = useState({});
   const [change, setChange] = useState(1);
-  const [namePlace, setNamePlace] = useState("");
+  const [namePlace, setNamePlace] = useState({ id: "", name: "" });
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
   const generateToken = () => {
-    const paramValue = queryParams.get("name");
-    setNamePlace(paramValue);
+    const paramValue = queryParams.get("q");
+    const paramName = queryParams.get("n");
+    setNamePlace({ id: paramValue, name: paramName });
     const now = new Date();
     const gmtPlus7Time = new Date(now.getTime() + 7 * 60 * 60 * 1000);
 
@@ -24,7 +25,8 @@ function Qr() {
     const secretKey = "Allahuakbar1213*";
 
     const payload = {
-      location: paramValue,
+      location: paramName,
+      locationId: paramValue,
       iat: unixTimestamp * 1000,
       exp: fifteenSecondsLater * 1000,
     };
@@ -71,7 +73,7 @@ function Qr() {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
-      <div className="text-3xl font-bold mb-4">{namePlace}</div>
+      <div className="text-3xl font-bold mb-4">{namePlace.name}</div>
       <div className="text-3xl font-bold mb-4">
         {time.hour}:{time.minute}:{time.second}
       </div>
