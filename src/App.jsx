@@ -9,15 +9,18 @@ function App() {
   const [change, setChange] = useState(1);
 
   const generateToken = () => {
-    const now = Math.floor(Date.now() / 1000);
-    const fifteenSecondsLater = now + 15;
+    const now = new Date();
+    const gmtPlus7Time = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+
+    const unixTimestamp = Math.floor(gmtPlus7Time.getTime() / 1000);
+    const fifteenSecondsLater = unixTimestamp + 15;
 
     const secretKey = "Allahuakbar1213*";
 
     const payload = {
       location: "Gedung Fakultas Hukum",
-      iat: now,
-      exp: fifteenSecondsLater,
+      iat: unixTimestamp * 1000,
+      exp: fifteenSecondsLater * 1000,
     };
 
     const jwt = sign(payload, secretKey);
@@ -28,10 +31,8 @@ function App() {
     let tokenString = generateToken();
     setToken(tokenString);
 
-    // Set interval untuk memeriksa apakah token telah kedaluwarsa setiap 1 detik
     const interval = setInterval(() => {
       if (isTokenExpired(tokenString)) {
-        // Token telah kedaluwarsa, generate token baru
         tokenString = generateToken();
         setToken(tokenString);
 
@@ -53,7 +54,11 @@ function App() {
   const isTokenExpired = (token) => {
     const [, payloadBase64] = token.split(".");
     const payload = JSON.parse(atob(payloadBase64));
-    const currentTime = Math.floor(Date.now() / 1000);
+    const now = new Date();
+    const gmtPlus7Time = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+
+    const currentTime = Math.floor(gmtPlus7Time.getTime() / 1000) * 1000;
+    // const currentTime = Math.floor(Date.now() / 1000) ;
 
     return payload.exp < currentTime;
   };
