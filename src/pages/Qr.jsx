@@ -66,7 +66,6 @@ function Qr() {
     const gmtPlus7Time = new Date(now.getTime() + 7 * 60 * 60 * 1000);
 
     const currentTime = Math.floor(gmtPlus7Time.getTime() / 1000) * 1000;
-    // const currentTime = Math.floor(Date.now() / 1000) ;
 
     return payload.exp < currentTime;
   };
