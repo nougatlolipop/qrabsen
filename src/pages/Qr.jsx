@@ -78,12 +78,17 @@ function Qr() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen">
-      <div className="text-3xl font-bold mb-4">{infoGedung.locationName}</div>
-      <div className="text-3xl font-bold mb-4">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-indigo-500">
+      <div className="rounded-tl-full bg-gradient-to-br from-white opacity-30 w-[250px] h-[250px] absolute right-0 bottom-0"></div>
+      <div className="rounded-tl-full bg-gradient-to-br from-white opacity-10 w-[500px] h-[500px] absolute right-0 bottom-0"></div>
+      <div className="rounded-br-full bg-gradient-to-br from-white opacity-50 w-[300px] h-[300px] absolute left-0 top-0"></div>
+      <div className="text-3xl font-bold mb-4 text-white">
+        {infoGedung.locationName}
+      </div>
+      <div className="text-3xl font-bold mb-4 text-white">
         {time.hour}:{time.minute}:{time.second}
       </div>
-      <div className="relative">
+      <div className="relative bg-white p-6 rounded-2xl">
         <QRCode value={token} level="L" />
         <img
           src={umsu}
@@ -91,7 +96,9 @@ function Qr() {
           className="absolute inset-0 mx-auto my-auto w-[50px] h-[50px]"
         />
       </div>
-      <div className="text-2xl font-bold mt-4">{`QR Code ${change} kali refresh`}</div>
+      <div className="text-xl font-semibold mt-4 text-white">
+        {infoGedung.locationAddress}
+      </div>
       {/* <div className="w-full px-40 break-all">{token}</div> */}
     </div>
   );
