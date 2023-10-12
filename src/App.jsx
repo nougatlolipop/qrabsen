@@ -7,7 +7,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Gedung />} />
-        <Route path="/qr" element={<Qr />} />
+        <Route path="/qr/:id" element={<Qr />} />
       </Routes>
     </Router>
   );

@@ -27,7 +27,7 @@ function Gedung() {
             <Link
               className="p-4 bg-indigo-500 text-white items-center justify-center rounded-lg"
               key={index}
-              to={`/qr?q=${data._id}&n=${data.locationName}`}
+              to={`/qr/${data._id}`}
             >
               {data.locationName}
             </Link>

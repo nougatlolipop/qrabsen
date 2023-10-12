@@ -2,20 +2,27 @@ import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { umsu } from "../assets";
 import sign from "jwt-encode";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { getGedungById } from "../Services/gedung.service";
 
 function Qr() {
   const [token, setToken] = useState("");
   const [time, setTime] = useState({});
   const [change, setChange] = useState(1);
-  const [namePlace, setNamePlace] = useState({ id: "", name: "" });
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
+  const [infoGedung, setInfoGedung] = useState({});
+  const { id } = useParams();
+
+  useEffect(() => {
+    getGedungById(id, (response) => {
+      if (response.status == 200) {
+        setInfoGedung(response.data.location);
+      } else {
+        console.log("Informasi", response.message);
+      }
+    });
+  }, []);
 
   const generateToken = () => {
-    const paramValue = queryParams.get("q");
-    const paramName = queryParams.get("n");
-    setNamePlace({ id: paramValue, name: paramName });
     const now = new Date();
     const gmtPlus7Time = new Date(now.getTime() + 7 * 60 * 60 * 1000);
 
@@ -25,8 +32,8 @@ function Qr() {
     const secretKey = "Allahuakbar1213*";
 
     const payload = {
-      location: paramName,
-      locationId: paramValue,
+      location: infoGedung.locationName,
+      locationId: infoGedung._id,
       iat: unixTimestamp * 1000,
       exp: fifteenSecondsLater * 1000,
     };
@@ -72,7 +79,7 @@ function Qr() {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
-      <div className="text-3xl font-bold mb-4">{namePlace.name}</div>
+      <div className="text-3xl font-bold mb-4">{infoGedung.locationName}</div>
       <div className="text-3xl font-bold mb-4">
         {time.hour}:{time.minute}:{time.second}
       </div>
