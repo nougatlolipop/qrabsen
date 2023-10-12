@@ -95,7 +95,7 @@ function Qr() {
       <div className="text-xl font-semibold mt-4 text-white">
         {infoGedung.locationAddress}
       </div>
-      <div className="w-full px-40 break-all">{token}</div>
+      {/* <div className="w-full px-40 break-all">{token}</div> */}
     </div>
   );
 }
