@@ -78,19 +78,25 @@ function Qr() {
       <div className="rounded-tl-full bg-gradient-to-br from-white opacity-30 w-[250px] h-[250px] absolute right-0 bottom-0"></div>
       <div className="rounded-tl-full bg-gradient-to-br from-white opacity-10 w-[500px] h-[500px] absolute right-0 bottom-0"></div>
       <div className="rounded-br-full bg-gradient-to-tl from-white opacity-50 w-[300px] h-[300px] absolute left-0 top-0"></div>
-      <div className="text-3xl font-bold mb-4 text-white">
-        {infoGedung.locationName}
+
+      <div className="text-4xl font-bold mb-4 text-white">
+        QR Code Attendance UMSU
       </div>
-      <div className="text-3xl font-bold mb-4 text-white">
-        {time.hour}:{time.minute}:{time.second}
-      </div>
-      <div className="relative bg-white p-6 rounded-2xl">
-        <QRCode value={token} level="L" />
-        <img
-          src={umsu}
-          alt="umsu"
-          className="absolute inset-0 mx-auto my-auto w-[50px] h-[50px]"
-        />
+      <div className="flex flex-col items-center bg-white py-14 px-8 rounded-3xl">
+        <div className="text-2xl font-semibold mb-4 text-indigo-500">
+          {infoGedung.locationName}
+        </div>
+        <div className="text-2xl font-semibold mb-4 text-indigo-500">
+          {time.hour}:{time.minute}:{time.second}
+        </div>
+        <div className="relative ">
+          <QRCode value={token} level="L" />
+          <img
+            src={umsu}
+            alt="umsu"
+            className="absolute inset-0 mx-auto my-auto w-[50px] h-[50px]"
+          />
+        </div>
       </div>
       <div className="text-xl font-semibold mt-4 text-white">
         {infoGedung.locationAddress}
