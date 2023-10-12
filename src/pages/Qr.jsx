@@ -75,9 +75,9 @@ function Qr() {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-indigo-500">
-      <div className="rounded-tl-full bg-gradient-to-br from-white opacity-30 w-[250px] h-[250px] absolute right-0 bottom-0"></div>
-      <div className="rounded-tl-full bg-gradient-to-br from-white opacity-10 w-[500px] h-[500px] absolute right-0 bottom-0"></div>
-      <div className="rounded-br-full bg-gradient-to-tl from-white opacity-50 w-[300px] h-[300px] absolute left-0 top-0"></div>
+      <div className="rounded-tl-full bg-gradient-to-br from-white opacity-30 w-40 h-40 absolute right-0 bottom-0"></div>
+      <div className="rounded-tl-full bg-gradient-to-br from-white opacity-10 w-80 h-80 absolute right-0 bottom-0"></div>
+      <div className="rounded-br-full bg-gradient-to-tl from-white opacity-50 w-60 h-60 absolute left-0 top-0"></div>
 
       <div className="text-4xl font-bold mb-4 text-white">
         QR Code Attendance UMSU
