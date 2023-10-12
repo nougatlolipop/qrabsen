@@ -8,21 +8,41 @@ import { getGedungById } from "../Services/gedung.service";
 function Qr() {
   const [token, setToken] = useState("");
   const [time, setTime] = useState({});
-  const [change, setChange] = useState(1);
   const [infoGedung, setInfoGedung] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
     getGedungById(id, (response) => {
       if (response.status == 200) {
-        setInfoGedung(response.data.location);
+        const gedung = response.data.location;
+        setInfoGedung(gedung);
+
+        let tokenString = generateToken(gedung);
+        setToken(tokenString);
+
+        const interval = setInterval(() => {
+          if (isTokenExpired(tokenString)) {
+            tokenString = generateToken(gedung);
+            setToken(tokenString);
+          }
+
+          const padWithZero = (num) => num.toString().padStart(2, "0");
+
+          setTime({
+            hour: padWithZero(new Date().getHours()),
+            minute: padWithZero(new Date().getMinutes()),
+            second: padWithZero(new Date().getSeconds()),
+          });
+        }, 1000);
+
+        return () => clearInterval(interval);
       } else {
         console.log("Informasi", response.message);
       }
     });
-  }, []);
+  }, [id]);
 
-  const generateToken = () => {
+  const generateToken = (gedung) => {
     const now = new Date();
     const gmtPlus7Time = new Date(now.getTime() + 7 * 60 * 60 * 1000);
 
@@ -32,8 +52,8 @@ function Qr() {
     const secretKey = "Allahuakbar1213*";
 
     const payload = {
-      location: infoGedung.locationName,
-      locationId: infoGedung._id,
+      locationId: gedung._id,
+      location: gedung.locationName,
       iat: unixTimestamp * 1000,
       exp: fifteenSecondsLater * 1000,
     };
@@ -41,30 +61,6 @@ function Qr() {
     const jwt = sign(payload, secretKey);
     return jwt;
   };
-
-  useEffect(() => {
-    let tokenString = generateToken();
-    setToken(tokenString);
-
-    const interval = setInterval(() => {
-      if (isTokenExpired(tokenString)) {
-        tokenString = generateToken();
-        setToken(tokenString);
-
-        setChange((prevCount) => prevCount + 1);
-      }
-
-      const padWithZero = (num) => num.toString().padStart(2, "0");
-
-      setTime({
-        hour: padWithZero(new Date().getHours()),
-        minute: padWithZero(new Date().getMinutes()),
-        second: padWithZero(new Date().getSeconds()),
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const isTokenExpired = (token) => {
     const [, payloadBase64] = token.split(".");
@@ -81,7 +77,7 @@ function Qr() {
     <div className="flex flex-col justify-center items-center min-h-screen bg-indigo-500">
       <div className="rounded-tl-full bg-gradient-to-br from-white opacity-30 w-[250px] h-[250px] absolute right-0 bottom-0"></div>
       <div className="rounded-tl-full bg-gradient-to-br from-white opacity-10 w-[500px] h-[500px] absolute right-0 bottom-0"></div>
-      <div className="rounded-br-full bg-gradient-to-br from-white opacity-50 w-[300px] h-[300px] absolute left-0 top-0"></div>
+      <div className="rounded-br-full bg-gradient-to-tl from-white opacity-50 w-[300px] h-[300px] absolute left-0 top-0"></div>
       <div className="text-3xl font-bold mb-4 text-white">
         {infoGedung.locationName}
       </div>
@@ -99,7 +95,7 @@ function Qr() {
       <div className="text-xl font-semibold mt-4 text-white">
         {infoGedung.locationAddress}
       </div>
-      {/* <div className="w-full px-40 break-all">{token}</div> */}
+      <div className="w-full px-40 break-all">{token}</div>
     </div>
   );
 }
